@@ -52,31 +52,17 @@ export default function AdminPage() {
         }
     };
 
-    const handleSaveDatabase = async (newWordsData: Word[]) => {
+    const handleDelete = async (id: string) => {
+        if (!confirm("Bu kelimeyi silmek istediğinize emin misiniz?")) return;
         try {
             setSaving(true);
-            const res = await fetch('/api/words', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(newWordsData)
-            });
-            if (res.ok) {
-                setWords(newWordsData);
-                setEditingId(null);
-                setIsAdding(false);
-            }
-        } catch (error) {
-            console.error("Failed to save words:", error);
-            alert("Kelime kaydedilirken bir hata oluştu.");
+            await fetch(`/api/words/${id}`, { method: 'DELETE' });
+            setWords(prev => prev.filter(w => w.id !== id));
+        } catch {
+            alert("Kelime silinirken bir hata oluştu.");
         } finally {
             setSaving(false);
         }
-    };
-
-    const handleDelete = (id: string) => {
-        if (!confirm("Bu kelimeyi silmek istediğinize emin misiniz?")) return;
-        const newWords = words.filter(w => w.id !== id);
-        handleSaveDatabase(newWords);
     };
 
     const handleEditStart = (word: Word) => {
@@ -90,14 +76,26 @@ export default function AdminPage() {
         setEditForm({});
     };
 
-    const handleEditSave = () => {
+    const handleEditSave = async () => {
         if (!editForm.english || !editForm.turkish || !editForm.level) {
             alert("Lütfen zorunlu alanları (İngilizce, Türkçe, Seviye) doldurun.");
             return;
         }
-
-        const newWords = words.map(w => w.id === editingId ? { ...w, ...editForm } as Word : w);
-        handleSaveDatabase(newWords);
+        try {
+            setSaving(true);
+            await fetch(`/api/words/${editingId}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ english: editForm.english, turkish: editForm.turkish, level: editForm.level }),
+            });
+            setWords(prev => prev.map(w => w.id === editingId ? { ...w, ...editForm } as Word : w));
+            setEditingId(null);
+            setEditForm({});
+        } catch {
+            alert("Kelime kaydedilirken bir hata oluştu.");
+        } finally {
+            setSaving(false);
+        }
     };
 
     const handleAddStart = () => {
@@ -113,13 +111,27 @@ export default function AdminPage() {
         });
     };
 
-    const handleAddSave = () => {
+    const handleAddSave = async () => {
         if (!editForm.english || !editForm.turkish || !editForm.level) {
             alert("Lütfen zorunlu alanları (İngilizce, Türkçe, Seviye) doldurun.");
             return;
         }
-        const newWords = [editForm as Word, ...words];
-        handleSaveDatabase(newWords);
+        try {
+            setSaving(true);
+            const res = await fetch('/api/words', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ english: editForm.english, turkish: editForm.turkish, level: editForm.level, example: editForm.example }),
+            });
+            const saved = await res.json();
+            setWords(prev => [saved, ...prev]);
+            setIsAdding(false);
+            setEditForm({});
+        } catch {
+            alert("Kelime eklenirken bir hata oluştu.");
+        } finally {
+            setSaving(false);
+        }
     };
 
     return (

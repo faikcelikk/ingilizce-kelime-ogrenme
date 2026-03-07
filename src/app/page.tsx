@@ -377,7 +377,7 @@ export default function Home() {
   const checkMultipleAnswers = (userAns: string, word: Word, answerField: "turkish" | "english", allowTypos: boolean = true) => {
     const cleanUser = userAns.trim().toLocaleLowerCase('tr-TR');
 
-    const primaryAnswers = word[answerField].split("/").map((a: string) => a.trim().toLocaleLowerCase('tr-TR'));
+    const primaryAnswers = word[answerField].split(/[\/,]/).map((a: string) => a.trim().toLocaleLowerCase('tr-TR'));
     const altAnswers = (answerField === "turkish" && word.alternativeMeanings)
       ? word.alternativeMeanings.map((a: string) => a.trim().toLocaleLowerCase('tr-TR'))
       : [];

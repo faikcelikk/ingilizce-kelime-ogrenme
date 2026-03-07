@@ -54,7 +54,7 @@ export const AIAdvisor = ({ mistakes }: { mistakes: MistakeData[] }) => {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    model: "google/gemini-2.0-flash-exp:free", // switched to free model
+                    model: "arcee-ai/trinity-large-preview:free",
                     messages: [
                         { role: "system", content: "Sen profesyonel bir İngilizce öğretmenisin ve yardımcı bir eğitim asistanısın." },
                         { role: "user", content: prompt }

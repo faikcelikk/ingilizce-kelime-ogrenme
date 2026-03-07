@@ -302,3 +302,9 @@ export const updateStats = (isCorrect: boolean, level: string, isSkipped: boolea
 
     return stats; // Return updated to trigger UI events if needed
 };
+
+export const resetProgressAndStats = () => {
+    if (typeof window === "undefined") return;
+    localStorage.removeItem(PROGRESS_KEY);
+    localStorage.removeItem(STATS_KEY);
+};

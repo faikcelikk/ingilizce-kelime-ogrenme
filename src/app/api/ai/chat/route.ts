@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
     try {
-        const { messages, model = "openai/gpt-3.5-turbo" } = await req.json();
+        const { messages, model = "arcee-ai/trinity-large-preview:free" } = await req.json();
         const apiKey = process.env.OPENROUTER_API_KEY;
 
         if (!apiKey) {

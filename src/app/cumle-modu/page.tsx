@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import Link from "next/link";
 import { ArrowLeft, Sparkles, RotateCw, CheckCircle2, XCircle, Lightbulb, Volume2, Brain, Zap, Target, ChevronRight, Info } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -37,6 +37,8 @@ export default function CumleModu() {
     const [sessionCorrect, setSessionCorrect] = useState(0);
     const [sessionWrong, setSessionWrong] = useState(0);
     const [streak, setStreak] = useState(0);
+    // useRef: her zaman güncel değeri tutar, closure sorunu olmaz
+    const usedWordsRef = useRef<string[]>([]);
     const [voiceAccent] = useState<VoiceAccent>(() =>
         (localStorage.getItem("ik_voice_accent") as VoiceAccent) || "en-US"
     );
@@ -46,7 +48,7 @@ export default function CumleModu() {
     const inputRef = useRef<HTMLInputElement>(null);
     const levels: Level[] = ["A1", "A2", "B1", "B2", "C1", "C2"];
 
-    const fetchExercise = async () => {
+    const fetchExercise = useCallback(async () => {
         setLoading(true);
         setError(null);
         setExercise(null);
@@ -54,15 +56,23 @@ export default function CumleModu() {
         setUserAnswer("");
         setShowHint(false);
 
+        // Ref her zaman güncel listeyi gösterir — son 20 kelime yeterli
+        const wordsToExclude = usedWordsRef.current.slice(-20);
+
         try {
             const res = await fetch("/api/ai/sentence", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ level: selectedLevel }),
+                body: JSON.stringify({ level: selectedLevel, usedWords: wordsToExclude }),
             });
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || "Cümle oluşturulamadı");
             setExercise(data);
+
+            // Kullanılan kelimeyi ref'e anında ekle (state güncellenmesini beklemeye gerek yok)
+            if (data.answer) {
+                usedWordsRef.current = [...usedWordsRef.current, data.answer.toLowerCase()];
+            }
 
             // Otomatik cümle seslendir
             setTimeout(() => {
@@ -75,7 +85,8 @@ export default function CumleModu() {
             setLoading(false);
             setTimeout(() => inputRef.current?.focus(), 100);
         }
-    };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedLevel, voiceAccent, speechRate]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -103,8 +114,8 @@ export default function CumleModu() {
             // Tam cümleyi seslendir
             const fullSentence = exercise.sentence.replace("___", exercise.answer);
             setTimeout(() => playAudio(fullSentence, { accent: voiceAccent, rate: speechRate }), 300);
-            // Otomatik sonraki soru
-            setTimeout(fetchExercise, 2200);
+            // Ref zaten güncel, direkt fetchExercise çağır
+            setTimeout(() => fetchExercise(), 2200);
         } else {
             setFeedback("wrong");
             setSessionWrong(p => p + 1);
@@ -209,7 +220,7 @@ export default function CumleModu() {
                             return (
                                 <button
                                     key={lvl}
-                                    onClick={() => setSelectedLevel(lvl)}
+                                    onClick={() => { setSelectedLevel(lvl); usedWordsRef.current = []; }}
                                     disabled={loading}
                                     className={`relative py-3 px-2 rounded-2xl border-2 font-bold text-sm transition-all active:scale-95 flex flex-col items-center gap-1 ${isSelected
                                         ? `${meta.color} ${meta.darkColor} border-current scale-105 shadow-md`
@@ -266,14 +277,34 @@ export default function CumleModu() {
                     {/* Hata */}
                     {error && (
                         <div className="p-8 text-center">
-                            <div className="w-16 h-16 bg-red-100 dark:bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <XCircle className="w-8 h-8 text-red-500" />
-                            </div>
-                            <p className="text-red-600 dark:text-red-400 font-bold mb-2">Bir hata oluştu</p>
-                            <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-6">{error}</p>
-                            <button onClick={fetchExercise} className="px-6 py-3 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 rounded-xl font-bold hover:opacity-90 transition">
-                                Tekrar Dene
-                            </button>
+                            {error === "no_words_available" ? (
+                                <>
+                                    <div className="w-16 h-16 bg-amber-100 dark:bg-amber-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                                        <span className="text-3xl">🎉</span>
+                                    </div>
+                                    <p className="text-amber-600 dark:text-amber-400 font-bold mb-2">Bu seviyeyi bitirdin!</p>
+                                    <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-6">
+                                        {selectedLevel} seviyesindeki tüm kelimeleri gördün. Seviyeyi sıfırlayarak tekrar başlayabilirsin.
+                                    </p>
+                                    <button
+                                        onClick={() => { usedWordsRef.current = []; setError(null); fetchExercise(); }}
+                                        className="px-6 py-3 bg-amber-500 hover:bg-amber-600 text-white rounded-xl font-bold transition"
+                                    >
+                                        Tekrar Başla
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    <div className="w-16 h-16 bg-red-100 dark:bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                                        <XCircle className="w-8 h-8 text-red-500" />
+                                    </div>
+                                    <p className="text-red-600 dark:text-red-400 font-bold mb-2">Bir hata oluştu</p>
+                                    <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-6">{error}</p>
+                                    <button onClick={fetchExercise} className="px-6 py-3 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 rounded-xl font-bold hover:opacity-90 transition">
+                                        Tekrar Dene
+                                    </button>
+                                </>
+                            )}
                         </div>
                     )}
 
