@@ -1,0 +1,12 @@
+﻿TABLE: collections | COUNT: 0
+COLS: id, name, description, created_at, updated_at
+---
+TABLE: collection_words | COUNT: 0
+COLS: collection_id, word_id
+---
+TABLE: word_progress | COUNT: 0
+COLS: word_id, wrong_count, skipped_count, correct_streak, last_answer, last_seen_at, next_review_at, ease_factor, interval_days, repetitions
+---
+TABLE: stats | COUNT: 0
+COLS: id, total_questions, correct_count, wrong_count, skipped_count, level_stats, daily_goal, streak
+---

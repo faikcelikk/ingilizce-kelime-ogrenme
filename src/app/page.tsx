@@ -160,26 +160,31 @@ export default function Home() {
     setSessionCorrect(0);
     setSessionWrong(0);
     setIsQuizFinished(false);
+    setIsQuizStarted(true);
 
     if (qType === "review" || qType === "mistakes") {
       setWordsLeftInSession(initialWords.map(w => w.id));
       setRoundQueue([]);
+      startNextQuestion(
+        initialWords,
+        [],
+        initialWords.map(w => w.id),
+        qType,
+        []
+      );
     } else {
       setWordsLeftInSession([]);
-      // Normal mod: tüm kelimeleri karıştırılmış sırayla bir kez sun
+      // Normal mod: tek bir shuffle yap, aynı queue'yu hem state'e hem fonksiyona ilet
       const queue = shuffle(initialWords.map(w => w.id));
       setRoundQueue(queue);
+      startNextQuestion(
+        initialWords,
+        [],
+        [],
+        qType,
+        queue
+      );
     }
-
-    setIsQuizStarted(true);
-    const queue = qType === "normal" ? shuffle(initialWords.map(w => w.id)) : [];
-    startNextQuestion(
-      initialWords,
-      [],
-      qType === "review" || qType === "mistakes" ? initialWords.map(w => w.id) : [],
-      qType,
-      queue
-    );
   };
 
   const getNextWord = (pool: Word[], currentHistory: string[], leftInSession: string[], qType: QuizType, currentRoundQueue: string[] = roundQueue) => {
@@ -225,7 +230,7 @@ export default function Home() {
     currentRoundQueue: string[] = roundQueue
   ) => {
     let nextWord = getNextWord(pool, currentHistory, leftInSession, currentQuizType, currentRoundQueue);
-    let newRoundQueue = currentRoundQueue;
+    let newRoundQueue = [...currentRoundQueue];
 
     // Normal modda queue bittiyse yeni tur başlat
     if (!nextWord && currentQuizType === "normal" && pool.length > 0) {
@@ -240,10 +245,11 @@ export default function Home() {
       setFeedback("idle");
       setCorrectAnswerText("");
 
-      // Normal modda: gösterilen kelimeyi queue'dan çıkar
+      // Normal modda: gösterilen kelimeyi queue'nun BAŞINDAN çıkar (shift)
       if (currentQuizType === "normal") {
-        const updatedQueue = newRoundQueue.filter(id => id !== nextWord!.id);
-        setRoundQueue(updatedQueue);
+        const firstIdx = newRoundQueue.indexOf(nextWord.id);
+        if (firstIdx !== -1) newRoundQueue.splice(firstIdx, 1);
+        setRoundQueue(newRoundQueue);
       }
 
       const newHistory = [...currentHistory, nextWord.id].slice(-Math.min(5, Math.ceil(pool.length / 2)));
