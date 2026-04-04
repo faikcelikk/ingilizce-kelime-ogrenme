@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import Database from 'better-sqlite3';
 import path from 'path';
 
+export const dynamic = 'force-dynamic';
+
 const DB_PATH = path.join(process.cwd(), 'src', 'data', 'oxford3000.db');
 
 function getDb() {

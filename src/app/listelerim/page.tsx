@@ -23,6 +23,7 @@ export default function CollectionsPage() {
     const [loading, setLoading] = useState(true);
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [newListName, setNewListName] = useState("");
+    const [newWordsText, setNewWordsText] = useState("");
     const [submitting, setSubmitting] = useState(false);
 
     const fetchCollections = useCallback(async () => {
@@ -40,15 +41,32 @@ export default function CollectionsPage() {
         if (!newListName.trim()) return;
 
         setSubmitting(true);
-        const id = await saveCollection({
-            name: newListName.trim(),
-            wordIds: []
-        });
+        let success = false;
+        
+        if (newWordsText.trim()) {
+            // Quick Create Mode
+            const res = await fetch("/api/collections/quick-create", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name: newListName.trim(), wordsText: newWordsText }),
+            });
+            if (res.ok) success = true;
+        } else {
+            // Normal Empty List Create
+            const id = await saveCollection({
+                name: newListName.trim(),
+                wordIds: []
+            });
+            if (id) success = true;
+        }
 
-        if (id) {
+        if (success) {
             setNewListName("");
+            setNewWordsText("");
             setIsCreateModalOpen(false);
             fetchCollections();
+        } else {
+            alert("Liste oluşturulurken bir hata oluştu.");
         }
         setSubmitting(false);
     };
@@ -151,11 +169,14 @@ export default function CollectionsPage() {
                                     <button className="flex-1 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 py-3 rounded-2xl font-black text-sm hover:opacity-90 transition-all">
                                         Listeyi İncele
                                     </button>
-                                    <Link href="/" className="flex-1">
-                                        <button className="w-full bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 py-3 rounded-2xl font-black text-sm hover:shadow-md transition-all">
+                                    <button 
+                                        onClick={() => {
+                                            localStorage.setItem('autoStartCollection', col.id);
+                                            window.location.href = '/';
+                                        }}
+                                        className="flex-1 w-full bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 py-3 rounded-2xl font-black text-sm hover:shadow-md transition-all">
                                             Çalışmaya Başla
-                                        </button>
-                                    </Link>
+                                    </button>
                                 </div>
                             </div>
                         ))}
@@ -169,7 +190,7 @@ export default function CollectionsPage() {
                     <div className="w-full max-w-sm bg-white dark:bg-zinc-900 rounded-[32px] p-8 shadow-2xl animate-in zoom-in-95 duration-300">
                         <h2 className="text-2xl font-black mb-6">Yeni Liste Oluştur</h2>
                         <form onSubmit={handleCreateList}>
-                            <div className="mb-6">
+                            <div className="mb-4">
                                 <label className="block text-xs font-black uppercase tracking-widest text-zinc-400 mb-2 px-1">Liste Adı</label>
                                 <input
                                     autoFocus
@@ -179,6 +200,21 @@ export default function CollectionsPage() {
                                     placeholder="Örn: Seyahat Kelimeleri"
                                     className="w-full bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-800 rounded-2xl px-5 py-4 font-bold focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none"
                                 />
+                            </div>
+
+                            <div className="mb-6">
+                                <label className="block text-xs font-black uppercase tracking-widest text-zinc-400 mb-2 px-1">Otomatik Kelime Ekle (Opsiyonel)</label>
+                                <textarea
+                                    value={newWordsText}
+                                    onChange={(e) => setNewWordsText(e.target.value)}
+                                    placeholder="Her satıra bir kelime yazın.
+Örn:
+apple=elma
+banana=muz
+car"
+                                    className="w-full h-32 bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-800 rounded-2xl px-5 py-4 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none resize-none"
+                                />
+                                <p className="text-[10px] text-zinc-500 mt-1.5 px-1">Otomatik listeye eklenir, sistemde yoksalar A1 seviyesinde kaydedilir.</p>
                             </div>
 
                             <div className="flex gap-3">

@@ -23,23 +23,23 @@ Ek olarak sistem, kullanıcının **yanlış yaptığı kelimeleri otomatik olar
 
 ## 2. Hedefler
 
-[] Yazmalı cevap sistemiyle aktif hatırlama sağlamak
-[] Seviye + harf filtreleri ile hedefli çalışma sunmak
-[] Yanlış kelimeleri yakalayıp tekrar ettirerek kalıcı öğrenme sağlamak
-[] Kullanıcıya net ilerleme ve istatistik göstermek
-[] Basit, hızlı ve mobil uyumlu bir deneyim sunmak
+[x] Yazmalı cevap sistemiyle aktif hatırlama sağlamak
+[x] Seviye + harf filtreleri ile hedefli çalışma sunmak
+[x] Yanlış kelimeleri yakalayıp tekrar ettirerek kalıcı öğrenme sağlamak
+[x] Kullanıcıya net ilerleme ve istatistik göstermek
+[x] Basit, hızlı ve mobil uyumlu bir deneyim sunmak
 
 ---
 
 ## 3. Kullanıcı Senaryoları (User Stories)
 
-[] Kullanıcı A1 ve A2 seçip EN→TR modunda random kelime çalışabilmeli
-[] Kullanıcı sadece “A” ve “B” ile başlayan kelimeleri görmek isteyebilmeli
-[] Kullanıcı cevap verdiğinde doğru/yanlış sonucunu anında görebilmeli
-[] Kullanıcı yanlış yaptığı kelimeleri “Yanlışlarım” ekranında görebilmeli
-[] Kullanıcı yanlış kelimeleri belirli aralıklarla tekrar karşısında bulabilmeli
-[] Kullanıcı sadece yanlış kelimelerle “Tekrar Modu” başlatabilmeli
-[] Kullanıcı gün sonunda kaç kelime çözdüğünü ve doğruluk oranını görebilmeli
+[x] Kullanıcı A1 ve A2 seçip EN→TR modunda random kelime çalışabilmeli
+[x] Kullanıcı sadece “A” ve “B” ile başlayan kelimeleri görmek isteyebilmeli
+[x] Kullanıcı cevap verdiğinde doğru/yanlış sonucunu anında görebilmeli
+[x] Kullanıcı yanlış yaptığı kelimeleri “Yanlışlarım” ekranında görebilmeli
+[x] Kullanıcı yanlış kelimeleri belirli aralıklarla tekrar karşısında bulabilmeli
+[x] Kullanıcı sadece yanlış kelimelerle “Tekrar Modu” başlatabilmeli
+[x] Kullanıcı gün sonunda kaç kelime çözdüğünü ve doğruluk oranını görebilmeli
 
 ---
 
@@ -47,31 +47,31 @@ Ek olarak sistem, kullanıcının **yanlış yaptığı kelimeleri otomatik olar
 
 ### 4.1 Quiz Modları
 
-[] EN → TR modu
-[] TR → EN modu
-[] Karma mod (iki yön random karışık) (opsiyonel)
+[x] EN → TR modu
+[x] TR → EN modu
+[x] Karma mod (iki yön random karışık) (opsiyonel)
 
 ### 4.2 Random Kelime Getirme
 
-[] Seçili havuzdan random kelime seçme
-[] Aynı kelimeyi üst üste getirmeyi azaltma (son X kelimeyi “yakın geçmiş” sayıp tekrar göstermeme)
+[x] Seçili havuzdan random kelime seçme
+[x] Aynı kelimeyi üst üste getirmeyi azaltma (son X kelimeyi “yakın geçmiş” sayıp tekrar göstermeme)
 
 ### 4.3 Seviye Grupları
 
-[] A1, A2, B1, B2 kelime grupları
-[] Çoklu seviye seçimi (checkbox)
+[x] A1, A2, B1, B2 kelime grupları
+[x] Çoklu seviye seçimi (checkbox)
 
 ### 4.4 Baş Harf Filtresi
 
-[] Çoklu harf seçimi (A, B, C...)
-[] Seçili seviye + harf kombinasyonu filtreleme
-[] Filtre sonucu kelime yoksa kullanıcıya uyarı gösterme
+[x] Çoklu harf seçimi (A, B, C...)
+[x] Seçili seviye + harf kombinasyonu filtreleme
+[x] Filtre sonucu kelime yoksa kullanıcıya uyarı gösterme
 
 ### 4.5 Cevap Kontrolü
 
-[] Büyük/küçük harf duyarsız kontrol
-[] Baştaki/sondaki boşlukları temizleme
-[] Bir kelime için birden fazla doğru cevap desteği (opsiyonel: “car/automobile” gibi)
+[x] Büyük/küçük harf duyarsız kontrol
+[x] Baştaki/sondaki boşlukları temizleme
+[x] Bir kelime için birden fazla doğru cevap desteği (opsiyonel: “car/automobile” gibi)
 
 ---
 
@@ -79,56 +79,56 @@ Ek olarak sistem, kullanıcının **yanlış yaptığı kelimeleri otomatik olar
 
 ### 5.1 Yanlış Kelimeleri Kaydetme
 
-[] Kullanıcı yanlış yaptığında o kelime “Yanlışlarım” listesine eklenmeli
-[] Her kelime için yanlış sayısı tutulmalı
-[] Kullanıcı aynı kelimeyi tekrar yanlış yaparsa yanlış sayısı artmalı
-[] Kullanıcı doğru yaptığında “yanlış havuzu”ndaki durumu güncellenmeli (ör: seans bazlı doğru sayısı)
+[x] Kullanıcı yanlış yaptığında o kelime “Yanlışlarım” listesine eklenmeli
+[x] Her kelime için yanlış sayısı tutulmalı
+[x] Kullanıcı aynı kelimeyi tekrar yanlış yaparsa yanlış sayısı artmalı
+[x] Kullanıcı doğru yaptığında “yanlış havuzu”ndaki durumu güncellenmeli (ör: seans bazlı doğru sayısı)
 
 ### 5.2 Yanlışları Ayrı Görüntüleme
 
-[] “Yanlışlarım” sayfası
-[] Filtreleme: seviye / harf / en çok yanlış / en yeni
-[] Kelime detay: doğru cevap, kullanıcı hatalı cevabı (son cevap), yanlış sayısı, son görülme tarihi
-[] Kelimeyi “çözüldü” olarak işaretleyebilme (manuel) (opsiyonel)
+[x] “Yanlışlarım” sayfası
+[x] Filtreleme: seviye / harf / en çok yanlış / en yeni
+[x] Kelime detay: doğru cevap, kullanıcı hatalı cevabı (son cevap), yanlış sayısı, son görülme tarihi
+[x] Kelimeyi “çözüldü” olarak işaretleyebilme (manuel) (opsiyonel)
 
 ### 5.3 Hataları Belirli Aralıklarla Tekrar Gösterme (Spaced Repetition)
 
-[] Yanlış yapılan kelimeler için “tekrar zamanı” hesaplanmalı
-[] Kullanıcı her oturum açtığında “Tekrar Etmen Gerekenler” listesi gösterilmeli
-[] Tekrar aralıkları (basit MVP planı):
+[x] Yanlış yapılan kelimeler için “tekrar zamanı” hesaplanmalı
+[x] Kullanıcı her oturum açtığında “Tekrar Etmen Gerekenler” listesi gösterilmeli
+[x] Tekrar aralıkları (basit MVP planı):
 
 * 1. yanlış sonrası: 10 dakika sonra
 * 2. yanlış sonrası: 1 gün sonra
 * 3. yanlış sonrası: 3 gün sonra
 * 4. yanlış sonrası: 7 gün sonra
-     [] Kelime doğru yapılırsa tekrar aralığı uzamalı; tekrar yanlış yapılırsa daha kısa aralığa geri düşmeli
+     [x] Kelime doğru yapılırsa tekrar aralığı uzamalı; tekrar yanlış yapılırsa daha kısa aralığa geri düşmeli
 
 ### 5.4 Tekrar Modu
 
-[] “Sadece Tekrar” butonu (sadece zamanı gelmiş kelimeler)
-[] “Sadece Yanlışlar” butonu (yanlış havuzundaki tüm kelimeler)
-[] Tekrar modunda da EN→TR / TR→EN seçilebilmeli
-[] Tekrar bitince özet gösterilmeli
+[x] “Sadece Tekrar” butonu (sadece zamanı gelmiş kelimeler)
+[x] “Sadece Yanlışlar” butonu (yanlış havuzundaki tüm kelimeler)
+[x] Tekrar modunda da EN→TR / TR→EN seçilebilmeli
+[x] Tekrar bitince özet gösterilmeli
 
 ---
 
 ## 6. İstatistikler
 
-[] Toplam soru sayısı
-[] Doğru sayısı / yanlış sayısı
-[] Doğruluk oranı (%)
-[] Seviye bazlı başarı oranı (A1-A2-B1-B2)
-[] Harf bazlı başarı oranı (opsiyonel)
-[] Günlük hedef: “Bugün 20 soru” gibi (opsiyonel)
-[] Streak (günlük çalışma serisi) (opsiyonel ama güçlü)
+[x] Toplam soru sayısı
+[x] Doğru sayısı / yanlış sayısı
+[x] Doğruluk oranı (%)
+[x] Seviye bazlı başarı oranı (A1-A2-B1-B2)
+[x] Harf bazlı başarı oranı (opsiyonel)
+[x] Günlük hedef: “Bugün 20 soru” gibi (opsiyonel)
+[x] Streak (günlük çalışma serisi) (opsiyonel ama güçlü)
 
 ---
 
 ## 7. Yönetim (Kelime Havuzu Yönetimi)
 
-[] Kelime ekleme / düzenleme / silme (admin veya lokal JSON düzenleme)
-[] Toplu ekleme: JSON/CSV import
-[] Kelime alanları:
+[x] Kelime ekleme / düzenleme / silme (admin veya lokal JSON düzenleme)
+[x] Toplu ekleme: JSON/CSV import (Hızlı Metin ile Listelere Eklendi)
+[x] Kelime alanları:
 
 * İngilizce
 * Türkçe
@@ -141,13 +141,13 @@ Ek olarak sistem, kullanıcının **yanlış yaptığı kelimeleri otomatik olar
 
 ## 8. UI/UX Gereksinimleri
 
-[] Basit, hızlı, mobil uyumlu tasarım
-[] Mod seçimi → seviye seçimi → harf seçimi → başla akışı
-[] Cevap input alanına otomatik odak (focus)
-[] Enter ile gönderme
-[] Doğru/yanlış geri bildirim (metin + ikon)
-[] “Doğru cevap şuydu” gösterimi
-[] “Sonraki kelime” kısa gecikmeyle gelsin (opsiyonel ayar)
+[x] Basit, hızlı, mobil uyumlu tasarım
+[x] Mod seçimi → seviye seçimi → harf seçimi → başla akışı
+[x] Cevap input alanına otomatik odak (focus)
+[x] Enter ile gönderme
+[x] Doğru/yanlış geri bildirim (metin + ikon)
+[x] “Doğru cevap şuydu” gösterimi
+[x] “Sonraki kelime” kısa gecikmeyle gelsin (opsiyonel ayar)
 
 ---
 
@@ -155,11 +155,11 @@ Ek olarak sistem, kullanıcının **yanlış yaptığı kelimeleri otomatik olar
 
 ### 9.1 Teknoloji
 
-[] Frontend: HTML + CSS + JavaScript (MVP) veya React (opsiyonel)
-[] Veri saklama:
+[x] Frontend: HTML + CSS + JavaScript (MVP) veya React (opsiyonel) - (Next.js 14 Eklendi)
+[x] Veri saklama:
 
 * MVP: LocalStorage (kullanıcı yanlışları ve istatistikleri kaydetmek için)
-* Gelişmiş: Firebase/Auth + Firestore (kullanıcı hesabı ve bulut kayıt için)
+* Gelişmiş: Firebase/Auth + Firestore (kullanıcı hesabı ve bulut kayıt için) - (Yerine Local SQLite veritabanı (oxford3000.db ve app.db) kullanıldı)
 
 ### 9.2 Örnek Veri Yapıları
 
@@ -193,46 +193,59 @@ Ek olarak sistem, kullanıcının **yanlış yaptığı kelimeleri otomatik olar
 
 ## 10. Sistem Akışı
 
-[] Kullanıcı mod seçer
-[] Seviye(ler) seçer
-[] Harf(ler) seçer
-[] Sistem uygun havuzu oluşturur
-[] Öncelik sırası:
+[x] Kullanıcı mod seçer
+[x] Seviye(ler) seçer
+[x] Harf(ler) seçer
+[x] Sistem uygun havuzu oluşturur
+[x] Öncelik sırası:
 
 * “Tekrar zamanı gelmiş kelimeler” varsa önce onları sor (opsiyonel toggle)
 * Yoksa normal havuzdan random sor
-  [] Kullanıcı cevap verir
-  [] Sistem kontrol eder
-  [] İstatistik + tekrar planı güncellenir
-  [] Sonraki soru
+  [x] Kullanıcı cevap verir
+  [x] Sistem kontrol eder
+  [x] İstatistik + tekrar planı güncellenir
+  [x] Sonraki soru
 
 ---
 
 ## 11. MVP (İlk Çıkış İçin Minimum)
 
-[] EN→TR ve TR→EN modları
-[] A1-A2-B1-B2 seviye seçimi
-[] Baş harf filtresi
-[] Random kelime üretimi
-[] Doğru/yanlış kontrol + doğru cevabı gösterme
-[] Yanlış kelimeleri kaydetme
-[] “Yanlışlarım” ekranı
-[] Spaced repetition: nextReviewAt hesaplama + “Tekrar Modu”
-[] LocalStorage ile kayıt
+[x] EN→TR ve TR→EN modları
+[x] A1-A2-B1-B2 seviye seçimi
+[x] Baş harf filtresi
+[x] Random kelime üretimi
+[x] Doğru/yanlış kontrol + doğru cevabı gösterme
+[x] Yanlış kelimeleri kaydetme
+[x] “Yanlışlarım” ekranı
+[x] Spaced repetition: nextReviewAt hesaplama + “Tekrar Modu”
+[x] LocalStorage ile kayıt (ve SQLite desteği eklendi)
 
 ---
 
 ## 12. Gelecek Geliştirmeler
 
-[] Kullanıcı hesabı + bulut kayıt
-[] Gelişmiş spaced repetition (SM-2 benzeri)
-[] Telaffuz / audio
-[] PWA offline destek
-[] Özel kelime listeleri (kullanıcı kendi listesini oluşturabilsin)
-[] AI öneri: zayıf kelimelere göre çalışma planı
+[ ] Kullanıcı hesabı + bulut kayıt (henüz MVP aşamasındayız)
+[x] Gelişmiş spaced repetition (SM-2 benzeri algoritmalar kuruldu)
+[x] Telaffuz / audio (Speech API ile eklendi)
+[ ] PWA offline destek
+[x] Özel kelime listeleri (kullanıcı kendi listesini oluşturabilsin)
+[x] AI öneri: zayıf kelimelere göre çalışma planı (AI Cümle Modu ve AI Asistan Eklendi)
+
+---
+
+## 13. PRD'de Olmayıp Sonradan Eklenen Değerli Özellikler
+
+[x] **Typo Toleransı (Levenshtein Mesafesi):** Kullanıcı kelimenin 1-2 harfini yanlış yazsa bile algoritma bunu fark eder ve kullanıcının yazım yanlışı yaptığını anlayıp kelimeyi doğru kabul edebilir.
+[x] **Hızlı (Otomatik) Liste Oluşturma:** Kullanıcı İngilizce=Türkçe formatında metin olarak kelimeleri yapıştırdığında, eğer kelime veritabanında yoksa bile arka planda veritabanına eklenir ve yepyeni bir grup saniyeler içinde oluşturulur.
+[x] **AI Cümle Pratiği Modu:** Yapay zeka kullanıcının seviyesine uygun, o kelimeleri barındıran cümle örnekleri üreterek boşluk doldurmaca oynamasını sağlar.
+[x] **Ses Ayarları (Aksan ve Hız):** Text-to-speech özelliği sadece eklendiyle kalmadı, kullanıcı ister İngiliz (UK), ister Amerikan (US), ister Avustralya (AU) aksanıyla farklı hızlarda (Yavaş, Normal, Hızlı) sesleri dinleyebilir.
+[x] **Yan Anlam (Alternative Meanings) Desteği:** Bir kelimenin sadece bir karşılığı olmak zorunda değildir. (Örn: "Aunt" için hem "Teyze" hem "Hala" doğru yanıt sayılır).
+[x] **Dark / Light Tema Modu:** Gece kullanımları için göz yormayan modern Dark Mod eklentisi.
+[x] **Gömülü SQLite (Oxford 3000):** Kelime havuzunu statik JSON'dan, daha büyük kapasitelere hizmet edebilecek "Better SQLite" veritabanına taşındı ve ~3000 profesyonel İngilizce kelimesi entegre edildi.
 
 ---
 
 İstersen hacı, bir sonraki adımda ben sana **MVP sprint görevlerini de** çıkarayım:
 
 * “Gün 1: veri yapısı + UI”, “Gün 2: quiz motoru”, “Gün 3: yanlış havuzu + tekrar” gibi **tam yapılacak iş listesi** halinde.
+*(Not: Sistem genel olarak tamamlandı ve kullanılmaya başlandı bile!)*

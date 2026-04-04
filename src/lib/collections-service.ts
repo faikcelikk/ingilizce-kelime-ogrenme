@@ -12,7 +12,7 @@ export interface WordCollection {
  */
 export const getUserCollections = async (): Promise<WordCollection[]> => {
     try {
-        const res = await fetch("/api/collections");
+        const res = await fetch("/api/collections", { cache: 'no-store' });
         if (!res.ok) throw new Error("Failed to fetch");
         return res.json();
     } catch (error) {

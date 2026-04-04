@@ -7,9 +7,9 @@ export interface PlayAudioOptions {
 }
 
 const RATE_MAP: Record<SpeechRate, number> = {
-    slow: 0.55,
-    normal: 0.9,
-    fast: 1.25,
+    slow: 0.6,
+    normal: 1.0,
+    fast: 1.3,
 };
 
 /**

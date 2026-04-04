@@ -2,27 +2,34 @@ import { NextRequest, NextResponse } from "next/server";
 import { getDb } from "@/lib/db";
 import { randomUUID } from "crypto";
 
+export const dynamic = 'force-dynamic';
+
 // GET /api/collections — tüm koleksiyonları getir
 export async function GET() {
     try {
         const db = getDb();
         const collections = db.prepare(`
-            SELECT c.id, c.name, c.description, c.created_at, c.updated_at,
-                   GROUP_CONCAT(cw.word_id) as word_ids
-            FROM collections c
-            LEFT JOIN collection_words cw ON cw.collection_id = c.id
-            GROUP BY c.id
-            ORDER BY c.created_at DESC
+            SELECT id, name, description, created_at, updated_at
+            FROM collections
+            ORDER BY created_at DESC
         `).all() as {
             id: string; name: string; description: string | null;
-            created_at: string; updated_at: string; word_ids: string | null;
+            created_at: string; updated_at: string;
         }[];
+
+        const allPairs = db.prepare(`SELECT collection_id, word_id FROM collection_words`).all() as { collection_id: string, word_id: string }[];
+        
+        const map: Record<string, string[]> = {};
+        for (const pair of allPairs) {
+            if (!map[pair.collection_id]) map[pair.collection_id] = [];
+            map[pair.collection_id].push(pair.word_id);
+        }
 
         const result = collections.map(c => ({
             id: c.id,
             name: c.name,
             description: c.description,
-            wordIds: c.word_ids ? c.word_ids.split(",") : [],
+            wordIds: map[c.id] || [],
             createdAt: c.created_at,
             updatedAt: c.updated_at,
         }));

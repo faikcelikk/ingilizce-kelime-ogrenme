@@ -94,7 +94,7 @@ export default function Home() {
       const timer = setTimeout(() => {
         playAudio(currentWord.english, { accent: voiceAccent, rate: speechRate });
         setAudioPlayed(true);
-      }, 300);
+      }, 50);
       return () => clearTimeout(timer);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -124,6 +124,17 @@ export default function Home() {
   useEffect(() => {
     getUserCollections().then(setUserCollections);
   }, []);
+
+  useEffect(() => {
+    const autoId = localStorage.getItem('autoStartCollection');
+    if (autoId && userCollections.length > 0) {
+      setSelectedCollection(autoId);
+      localStorage.removeItem('autoStartCollection');
+      setTimeout(() => {
+        handleStartNormal(autoId);
+      }, 50);
+    }
+  }, [userCollections]);
 
   useEffect(() => {
     // Calculate Review and Mistakes stats purely for UI when page loads or comes back
@@ -265,15 +276,16 @@ export default function Home() {
     }
   };
 
-  const handleStartNormal = async () => {
+  const handleStartNormal = async (overrideCollectionId?: string | React.MouseEvent) => {
+    const effectiveCollectionId = typeof overrideCollectionId === 'string' ? overrideCollectionId : selectedCollection;
     setError(null);
-    if (selectedLevels.size === 0) {
-      setError("Lütfen en az bir seviye seçin.");
+    if (!effectiveCollectionId && selectedLevels.size === 0) {
+      setError("Lütfen en az bir seviye veya liste seçin.");
       return;
     }
 
     try {
-      const res = await fetch('/api/words');
+      const res = await fetch('/api/words', { cache: 'no-store' });
       const latestWords: Word[] = await res.json();
 
       const selectedLetterArray = letters
@@ -281,27 +293,45 @@ export default function Home() {
         .map((l) => l.toLocaleLowerCase('tr-TR').trim())
         .filter((l) => l.length > 0);
 
-      let filtered = latestWords.filter((word) => {
-        // Modül ve seviye kontrolü
-        if (!selectedLevels.has(word.level as Level)) return false;
+      let filtered = latestWords;
 
-        // Baş harf filtresi (virgülle ayırmış olabilir)
-        if (selectedLetterArray.length > 0) {
-          const checkWord = mode === "en-tr" ? word.english : mode === "tr-en" ? word.turkish : word.english;
-          const matchesLetter = selectedLetterArray.some((letter) =>
-            checkWord.toLowerCase().startsWith(letter)
-          );
-          if (!matchesLetter) return false;
+      if (effectiveCollectionId) {
+        // Liste seçiliyse tüm seviye ve harf filtrelerini yok say, direkt o listeyi getir
+        let collection = userCollections.find(c => c.id === effectiveCollectionId);
+
+        // State gecikmesi varsayımıyla, listede yoksa taze bir fetch atalım
+        if (!collection) {
+          try {
+            const freshColsResponse = await fetch("/api/collections", { cache: "no-store" });
+            const freshCols = await freshColsResponse.json();
+            setUserCollections(freshCols);
+            collection = freshCols.find((c: any) => c.id === effectiveCollectionId);
+          } catch (e) {
+            console.error("Fresh collections fetch failed", e);
+          }
         }
-        return true;
-      });
 
-      // Filter by selected collection if active
-      if (selectedCollection) {
-        const collection = userCollections.find(c => c.id === selectedCollection);
         if (collection) {
           filtered = filtered.filter(w => collection.wordIds.includes(w.id));
+        } else {
+          setError("Seçtiğiniz liste hafızada eksik! (Muhtemelen tarayıcı önbelleği). Lütfen CTRL+F5 ile sayfayı yenileyiniz.");
+          return;
         }
+      } else {
+        // Modül ve seviye kontrolü
+        filtered = filtered.filter((word) => {
+          if (!selectedLevels.has(word.level as Level)) return false;
+
+          // Baş harf filtresi (virgülle ayırmış olabilir)
+          if (selectedLetterArray.length > 0) {
+            const checkWord = mode === "en-tr" ? word.english : mode === "tr-en" ? word.turkish : word.english;
+            const matchesLetter = selectedLetterArray.some((letter) =>
+              checkWord.toLowerCase().startsWith(letter)
+            );
+            if (!matchesLetter) return false;
+          }
+          return true;
+        });
       }
 
       if (filtered.length === 0) {
@@ -901,6 +931,7 @@ export default function Home() {
 
             <div className="pt-4">
               <button
+                id="btn-start-normal"
                 onClick={handleStartNormal}
                 className="w-full group relative flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-500 to-violet-600 hover:from-indigo-600 hover:to-violet-700 text-white p-4 rounded-xl font-bold text-lg shadow-xl shadow-indigo-500/30 transition-all outline-none focus:ring-4 focus:ring-indigo-500/30 active:scale-[0.98]"
               >
